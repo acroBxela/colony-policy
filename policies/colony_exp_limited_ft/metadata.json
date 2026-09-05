@@ -1,0 +1,59 @@
+{
+  "run": "colony_exp_limited_ft",
+  "frames": 170000384,
+  "checkpoint": "colony_exp_limited_ft/pose/step_000170000384",
+  "jax_version": "0.7.2",
+  "platform": "cpu",
+  "dtype": "float32",
+  "measured_fields": [
+    "x_enu_m",
+    "y_enu_m",
+    "yaw_enu_rad",
+    "vx_body_ms",
+    "vy_body_ms",
+    "yaw_rate_rads",
+    "rear_wheel_speed_ms",
+    "accel_x_ms2",
+    "accel_y_ms2",
+    "measured_steer_rad",
+    "measured_rear_torque_nm"
+  ],
+  "previous_command": [
+    "steer_rad",
+    "rear_torque_nm"
+  ],
+  "dt": "positive seconds; trained at 0.02 s",
+  "output": [
+    "steer_rad",
+    "rear_torque_nm"
+  ],
+  "track": {
+    "type": "smooth_oval",
+    "start_xy": [
+      3.953184127807617,
+      -36.0
+    ],
+    "start_yaw_rad": 1.5707963267948966,
+    "turn_direction": -1,
+    "straight_length_m": 20.0,
+    "turn_radius_m": 8.0,
+    "transition_m": 3.0,
+    "sample_spacing_m": 0.05,
+    "half_width_m": 2.25
+  },
+  "torque_bounds_nm": [
+    -400,
+    1000
+  ],
+  "lateral_accel_limit_ms2": 7.0,
+  "lateral_accel_cost": 30.0,
+  "training_dynamics": {
+    "checkpoint_name": "can_am_x3_r322_exptanh_planar____",
+    "checkpoint_step": 5800,
+    "adapter": "canam_planar",
+    "actuator_dynamics": {
+      "enabled": false
+    }
+  },
+  "notes": "No previous s or internal mutable state. Caller retains previous output command. No safety supervisor or lap-completion detector in this inference artifact."
+}
