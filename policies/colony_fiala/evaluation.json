@@ -1,0 +1,19 @@
+{
+  "colony_fiala_rollouts": {
+    "checkpoint": "/home/borcaa/research/rl_project/variable_dt_rl/runs/colony_fiala/pose/checkpoints/step_000210108416/checkpoint.msgpack",
+    "seed": 20260902,
+    "episodes": 128,
+    "completed": 128,
+    "lap_mean_s": 18.48455047607422,
+    "lap_std_s": 0.2452412247657776,
+    "rms_e_m": 0.15157332996137027,
+    "p95_abs_e_m": 0.3546799123287201,
+    "peak_abs_e_m": 0.7896716594696045,
+    "peak_abs_ay_ms2": 4.424968719482422,
+    "fraction_abs_ay_over7": 0.0,
+    "peak_speed_ms": 6.211056232452393,
+    "torque_min_nm": -300.7436828613281,
+    "torque_max_nm": 1000.0,
+    "peak_abs_steer_rad": 0.4000000059604645
+  }
+}
