@@ -3,8 +3,9 @@
 Self-contained **CPU JAX/StableHLO inference artifact**, not a dynamics model,
 standalone executable, or real-car safety controller. No imports from the RL
 project or the vehicle-model repository are needed at inference time.
-This standalone repository contains only the exported policy and its loader,
-not the XAL source code, dynamics checkpoints, or training data.
+This standalone repository contains exported inference functions and loaders,
+not the XAL source code, raw training checkpoints, or training data. The unroll
+artifact also embeds the frozen dynamics needed for prediction.
 
 ## Load and run
 
@@ -61,6 +62,55 @@ torque in [-600, 2000] Nm. Both measured controls and previous commands are
 network inputs; they coincided in the actuator-dynamics-disabled training.
 No previous-s or recurrent memory is needed. Caller handles lap completion,
 state estimation, actuation, and safety; none is included in the export.
+
+## Closed-loop prediction: policy_unroll
+
+```python
+from policy_unroll import policy_unroll, STATE_FIELDS
+
+# Same measured[11] and previous[2] inputs as policy.jax.
+states, commands = policy_unroll(measured, previous, dt=0.02, N=100)
+# states.shape == (101, 14), commands.shape == (100, 2)
+s, e, dphi = states[:, 11], states[:, 12], states[:, 13]
+```
+
+`policy_unroll.jax` bundles the policy, exptanh dynamics checkpoint 5800, track,
+and all conversions. The Python loader needs only this artifact and JAX;
+`policy.jax` is not separately required for unrolling. N is a Python/static
+integer; changing N can cause compilation. Warm up the desired horizon first.
+The low-level serialized function accepts `(measured[11], previous[2], dts[N])`;
+the wrapper supplies N copies of dt. N=0 returns only the initial state.
+
+State columns, in order:
+
+```text
+x, y, yaw, vx, vy, yaw_rate, rear_wheel_speed, accel_x, accel_y,
+measured_steer, measured_torque, s, e, dphi
+```
+
+All units and frames match the policy inputs above. Acceleration channels are
+the model's filtered `fcog_x/fcog_y` states, not an independent IMU simulation.
+`dphi` is course-heading error (body yaw + sideslip - reference heading).
+State 0 is the supplied measurement plus its projected s/e/dphi. Command k
+is computed from state k, held over dt, and produces state k+1. Predicted
+measured controls equal that applied command because actuator lag is disabled.
+Initial measured controls and previous commands may differ; both are retained
+for the first policy call. Speed and beta can be derived from vx/vy.
+
+The integrator is the same forward-Euler/Frenet update as training, with **five
+equal dt/5 substeps**. Training randomized the substep partition; this export
+is deterministic and does not reproduce that randomness. Trained control dt
+is 20 ms; arbitrary positive dt is accepted but large dt can be inaccurate or
+unstable. No stopping/reset occurs at e-bounds, lap completion, or timeout;
+s remains unwrapped from its initial one-lap projection. Long predictions,
+out-of-distribution states, and model-to-real error require caller judgment.
+There is no collision checking or safety supervisor.
+
+Run standalone regression tests with:
+
+```bash
+JAX_PLATFORMS=cpu python -m unittest test_policy_unroll
+```
 
 ## Provenance and limits
 
