@@ -1,0 +1,47 @@
+{
+  "run": "colony_hz_scratch",
+  "policy_frames": 170000384,
+  "dynamics_checkpoint": "can_am_x3_r322_exptanh_planar____",
+  "dynamics_step": 5800,
+  "jax_version": "0.7.2",
+  "torque_bounds_nm": [
+    -400,
+    1000
+  ],
+  "steering_limit_rad": 0.4,
+  "speed_target_ms": 6.0,
+  "lateral_accel_limit_ms2": 7.0,
+  "lateral_accel_cost": 30.0,
+  "state_fields": [
+    "x_enu_m",
+    "y_enu_m",
+    "yaw_enu_rad",
+    "vx_body_ms",
+    "vy_body_ms",
+    "yaw_rate_rads",
+    "rear_wheel_speed_ms",
+    "accel_x_ms2",
+    "accel_y_ms2",
+    "measured_steer_rad",
+    "measured_rear_torque_nm",
+    "s_m",
+    "e_m",
+    "dphi_rad"
+  ],
+  "command_fields": [
+    "steer_rad",
+    "rear_torque_nm"
+  ],
+  "input_shapes": [
+    "11",
+    "2",
+    "N"
+  ],
+  "output_shapes": [
+    "N+1,14",
+    "N,2"
+  ],
+  "substeps": 5,
+  "integrator": "Training forward-Euler integrator; equal dt/substeps partitions",
+  "notes": "Initial state included. No randomization, termination, or reset. s unwrapped after initial projection. No safety supervisor; model prediction only."
+}

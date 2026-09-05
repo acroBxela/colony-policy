@@ -1,0 +1,57 @@
+name: colony_hz_scratch_nominal
+source: Closed-loop policy rollout, not trajectory optimization
+policy_run: colony_hz_scratch
+policy_checkpoint: /home/borcaa/research/rl_project/variable_dt_rl/runs/colony_hz_scratch/pose/checkpoints/step_000170000384/checkpoint.msgpack
+policy_sha256: 91d2948e48a515e34543605607a98d878ff9bfb89fff9513bcb804a06359400e
+policy_unroll_sha256: 54c0c80efee2ecf2d0fc4fe9d20b1a8585d55e3a6b3bf635ead288abaf6ea263
+training_dynamics:
+  checkpoint_name: can_am_x3_r322_exptanh_planar____
+  checkpoint_step: 5800
+  adapter: canam_planar
+  actuator_dynamics:
+    enabled: false
+dt_seconds: 0.02
+physics_substeps: 5
+integration: Deterministic equal-substep training Euler integrator
+pose0:
+  x: 3.953184127807617
+  y: -36.0
+  psi: 1.5707963705062866
+initial_measured:
+- 3.953184127807617
+- -36.0
+- 1.5707963705062866
+- 0.10000000149011612
+- 0.0
+- 0.0
+- 0.10000000149011612
+- 0.0
+- 0.0
+- 0.0
+- 250.0
+initial_previous_command:
+- 0.0
+- 250.0
+frame:
+  name: Colony local ENU
+  latitude_deg: 42.7371538
+  longitude_deg: -73.6692229
+  yaw: radians; zero east, positive counterclockwise
+e_min: -2.25
+e_max: 2.25
+nominal_lap_length_m: 96.26548245743669
+control_alignment: Row k command applies from t[k] to t[k+1]. Final row holds last
+  command; no terminal decision.
+acceleration: fcog_x/fcog_y are filtered model accelerations, aliased as accel_x/accel_y.
+notes: Includes startup transient. Terminal state/time linearly interpolated to exact
+  lap-end s; earlier samples unchanged. SI units. No independent reference surface
+  or tire-force columns fabricated.
+schema_version: 2
+active_surface: track
+surfaces:
+  track:
+    kind: planar
+    closed: true
+    N: 1927
+    s0: 0.0
+    ds: 0.04998207811912601

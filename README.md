@@ -10,20 +10,24 @@ No XAL installation is needed. These are simulation-tested research policies,
 
 | Policy | Torque bounds (Nm) | Lateral acceleration cost | Simulation result |
 | --- | --- | --- | --- |
-| [colony_exp_limited_ft](policies/colony_exp_limited_ft/README.md) — latest | −400 to 1000 | Squared excess above \|ay\| = 7 m/s², weight 30 | 128/128 completed; 20.54 s mean lap |
+| [colony_hz_scratch](policies/colony_hz_scratch/README.md) — latest | −400 to 1000 | Squared excess above \|ay\| = 7 m/s², weight 30 | 128/128 completed; 20.69 s mean lap; RMS e 0.182 m |
+| [colony_exp_limited_ft](policies/colony_exp_limited_ft/README.md) | −400 to 1000 | Squared excess above \|ay\| = 7 m/s², weight 30 | 128/128 completed; 20.54 s mean lap |
 | [colony_exp](policies/colony_exp/README.md) — previous | −600 to 2000 | None | 128/128 completed; 20.23 s mean lap |
 
-Both use `can_am_x3_r322_exptanh_planar____`, dynamics checkpoint 5800,
+All use `can_am_x3_r322_exptanh_planar____`, dynamics checkpoint 5800,
 the same Colony track, and the same input/output interface. Results are on
 each policy's own deterministic simulation evaluation; they are not guarantees.
-The current limited-torque policy is checkpoint `step_000170000384`, fine-tuned
-from the previous policy. Earlier versions remain separately usable.
+The latest policy was trained from scratch with uniformly randomized 50–130 Hz
+control frequency per episode, full-lap randomized starts, and lateral-error
+weight 12. Its selected checkpoint is `step_000170000384`. Earlier versions
+remain separately usable. Evaluation spawn/timing distributions differ across
+policies, so the lap times are not a controlled head-to-head comparison.
 
 ## Quick start
 
 ```bash
 git clone https://github.com/acroBxela/colony-policy.git
-cd colony-policy/policies/colony_exp_limited_ft
+cd colony-policy/policies/colony_hz_scratch
 python -m pip install -r requirements.txt
 JAX_PLATFORMS=cpu python load_policy.py
 JAX_PLATFORMS=cpu python -m unittest test_policy_unroll
@@ -32,8 +36,8 @@ JAX_PLATFORMS=cpu python -m unittest test_policy_unroll
 From the repository root, the loaders also support named imports:
 
 ```python
-from policies.colony_exp_limited_ft.load_policy import load_policy
-from policies.colony_exp_limited_ft.policy_unroll import policy_unroll
+from policies.colony_hz_scratch.load_policy import load_policy
+from policies.colony_hz_scratch.policy_unroll import policy_unroll
 
 policy = load_policy()
 command = policy(measured, previous_command, dt)
