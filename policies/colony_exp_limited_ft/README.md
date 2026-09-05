@@ -3,6 +3,31 @@
 [Trajectory rollouts](plots/trajectory_rollouts.png) ·
 [States and controls, including ay](plots/states_and_controls_vs_s.png)
 
+## Nominal trajectory for trajopt_drive
+
+[Download the complete bundle](nominal_trajectory.zip), or browse
+[nominal_trajectory/](nominal_trajectory/). It contains `traj.csv`,
+`surface_track.npz`, `meta.yaml`, `stats.json`, and native plotting previews.
+This is a rollout of this exact published policy, starting at vx=0.1 m/s,
+s=e=beta=0, previous torque=250 Nm: 1030 samples, one lap in 20.5632 s.
+Startup is retained; only the final crossing is interpolated to exact lap-end s.
+The bundle was validated using drive_trajopt's loader and plotting code.
+
+In an environment with drive_trajopt and its dependencies installed:
+
+```python
+from drive_trajopt.traj import load_artifact
+trajectory = load_artifact("nominal_trajectory")
+```
+
+```bash
+python -m drive_trajopt.traj nominal_trajectory
+```
+
+Use active track coordinates (`s_track`, `e_track`, `dphi_track`). The surface
+is the original track corridor, not a fitted or independently optimized path.
+See the bundle's README and metadata for command timing and coordinate details.
+
 Self-contained **CPU JAX/StableHLO inference artifact**, not a dynamics model,
 standalone executable, or real-car safety controller. No imports from the RL
 project or the vehicle-model repository are needed at inference time.
