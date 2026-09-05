@@ -1,0 +1,81 @@
+{
+  "run": "colony_fiala_e20_h25",
+  "frames": 10092544,
+  "checkpoint": "/home/borcaa/research/rl_project/variable_dt_rl/runs/colony_fiala_e20_h25/pose/checkpoints/step_000010092544/checkpoint.msgpack",
+  "jax_version": "0.7.2",
+  "platform": "cpu",
+  "dtype": "float32",
+  "measured_fields": [
+    "x_enu_m",
+    "y_enu_m",
+    "yaw_enu_rad",
+    "vx_body_ms",
+    "vy_body_ms",
+    "yaw_rate_rads",
+    "rear_wheel_speed_ms",
+    "accel_x_ms2",
+    "accel_y_ms2",
+    "measured_steer_rad",
+    "measured_rear_torque_nm"
+  ],
+  "previous_command": [
+    "steer_rad",
+    "rear_torque_nm"
+  ],
+  "dt": "positive seconds; see training_timing for training distribution",
+  "training_timing": {
+    "physics_dt_range_seconds": [
+      0.0015384615384615385,
+      0.004
+    ],
+    "control_dt_sampling": "uniform_hz_partition",
+    "control_dt_scope": "episode",
+    "physics_substeps_per_control": 5,
+    "episode_seconds": 70,
+    "state_hz": 200,
+    "camera_hz": 30,
+    "camera_timing": "async_controller_tick",
+    "drive_agent_physics_hz": 250,
+    "drive_agent_control_hz": 50,
+    "controller_deployment_hz": "uncapped"
+  },
+  "training_fiala_randomization": {
+    "friction_fraction": 0.03,
+    "cf_fraction": 0.03
+  },
+  "output": [
+    "steer_rad",
+    "rear_torque_nm"
+  ],
+  "track": {
+    "type": "smooth_oval",
+    "start_xy": [
+      3.953184127807617,
+      -36.0
+    ],
+    "start_yaw_rad": 1.5707963267948966,
+    "turn_direction": -1,
+    "straight_length_m": 20.0,
+    "turn_radius_m": 8.0,
+    "transition_m": 3.0,
+    "sample_spacing_m": 0.05,
+    "half_width_m": 2.25
+  },
+  "torque_bounds_nm": [
+    -400,
+    1000
+  ],
+  "steering_limit_rad": 0.4,
+  "speed_target_ms": 6.0,
+  "lateral_accel_limit_ms2": 7.0,
+  "lateral_accel_cost": 30.0,
+  "training_dynamics": {
+    "checkpoint_name": "can_am_x3_r322_fiala_planar_vnew2",
+    "checkpoint_step": 1600,
+    "adapter": "canam_planar",
+    "actuator_dynamics": {
+      "enabled": false
+    }
+  },
+  "notes": "No previous s or internal mutable state. Caller retains previous output command. No safety supervisor or lap-completion detector in this inference artifact."
+}
